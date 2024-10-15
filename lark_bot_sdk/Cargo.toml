@@ -1,7 +1,7 @@
 workspace = { members = ["gen_api", "lark_macros"] }
 
 [package]
-name = "lark_bot_sdk"
+name = "lark_bot_sdk_patch"
 version = "0.1.0"
 edition = "2021"
 authors = ["booiris02@gmail.com"]

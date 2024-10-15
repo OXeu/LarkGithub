@@ -794,7 +794,7 @@ dependencies = [
  "dotenvy_macro",
  "futures-util",
  "jsonwebtoken",
- "lark_bot_sdk",
+ "lark_bot_sdk_patch",
  "octocrab",
  "openssl",
  "regex",
@@ -806,7 +806,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "lark_bot_sdk"
+name = "lark_bot_sdk_macros"
+version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn 2.0.79",
+]
+
+[[package]]
+name = "lark_bot_sdk_patch"
 version = "0.1.0"
 dependencies = [
  "ahash",
@@ -825,14 +833,6 @@ dependencies = [
  "tokio",
  "tokio-util",
  "tracing",
-]
-
-[[package]]
-name = "lark_bot_sdk_macros"
-version = "0.1.0"
-dependencies = [
- "quote",
- "syn 2.0.79",
 ]
 
 [[package]]
