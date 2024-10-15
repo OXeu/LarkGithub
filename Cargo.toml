@@ -19,3 +19,4 @@ futures-util = { version = "0.3" }
 base64 = "0.22.1"
 bytes = "1.7.2"
 reqwest = "0.12.8"
+openssl = { version = "0.10", features = ["vendored"] }

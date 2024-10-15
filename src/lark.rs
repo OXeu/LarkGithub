@@ -17,17 +17,17 @@ use tracing::{debug, warn};
 use crate::{issue::IssueReq, utils::for_string};
 pub fn client() -> &'static DefaultLarkClient {
     static CLIENT: OnceLock<DefaultLarkClient> = OnceLock::new();
-    let app_id = dotenv!("LG_APP_ID");
-    let app_secret = dotenv!("LG_APP_SECRET");
+    let app_id = dotenv!("LARK_APP_ID");
+    let app_secret = dotenv!("LARK_APP_SECRET");
     CLIENT.get_or_init(|| Lark::new(app_id, app_secret))
 }
 
 pub async fn fetch_records() -> Vec<AppTableRecordSubResp> {
-    let app_token = dotenv!("LG_BITABLE_TOKEN");
-    let table_id = dotenv!("LG_BITABLE_TABLE_ID");
-    let field_names = dotenv!("LG_BITABLE_FIELDS");
-    let conjunction = dotenv!("LG_BITABLE_CONDITION_CONJUNCTION");
-    let cond_str = dotenv!("LG_BITABLE_CONDITIONS");
+    let app_token = dotenv!("LARK_BITABLE_TOKEN");
+    let table_id = dotenv!("LARK_BITABLE_TABLE_ID");
+    let field_names = dotenv!("LARK_BITABLE_FIELDS");
+    let conjunction = dotenv!("LARK_BITABLE_CONDITION_CONJUNCTION");
+    let cond_str = dotenv!("LARK_BITABLE_CONDITIONS");
     let fields: Vec<Option<String>> = field_names
         .split(",")
         .filter(|s| !s.is_empty())
@@ -117,8 +117,8 @@ pub async fn bind_issue(
     record_id: &str,
     issue: u64,
 ) -> Result<(UpdateBitableRecordResp, CommonResponse), lark_bot_sdk::error::Error> {
-    let app_token = dotenv!("LG_BITABLE_TOKEN");
-    let table_id = dotenv!("LG_BITABLE_TABLE_ID");
+    let app_token = dotenv!("LARK_BITABLE_TOKEN");
+    let table_id = dotenv!("LARK_BITABLE_TABLE_ID");
     let github_bind_field = dotenv!("LARK_GITHUB_BIND_FIELD");
     let owner = dotenv!("GH_OWNER");
     let repo = dotenv!("GH_REPO");

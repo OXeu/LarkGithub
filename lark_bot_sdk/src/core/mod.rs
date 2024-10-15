@@ -74,6 +74,7 @@ impl Lark<RWStoreMemory, DefaultClient> {
     pattern = "owned",
     build_fn(private, name = "build_from_builder")
 )]
+#[allow(dead_code)]
 pub(crate) struct LarkInner<IStore, IHttpClient> {
     #[builder(private)]
     pub app_id: String,

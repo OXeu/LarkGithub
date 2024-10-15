@@ -13,11 +13,13 @@ mod utils;
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();
-    dotenvy::dotenv().unwrap();
+    if cfg!(debug_assertions) {
+        dotenvy::dotenv().unwrap();
+    }
     init_gh().await;
     let update_enable = dotenv!("ISSUE_UPDATE") == "true";
     let records = fetch_records().await;
-    info!("✨ 获取到 {:#?} 条记录",records.len());
+    info!("✨ 获取到 {:#?} 条记录", records.len());
     info!("");
     for record in records.iter() {
         let issue = format_record(&record);
@@ -29,10 +31,7 @@ async fn main() {
                     Ok(time) => {
                         if record.last_modified_time > time.timestamp_millis() {
                             if let Err(err) = update_issues(id, issue).await {
-                                error!(
-                                    "😰 更新失败：{:?}\n{:?}",
-                                    record, err
-                                );
+                                error!("😰 更新失败：{:?}\n{:?}", record, err);
                             } else {
                                 info!("😎 更新成功");
                             }
