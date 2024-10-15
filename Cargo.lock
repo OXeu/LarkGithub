@@ -784,7 +784,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "lark-github-isssue"
+name = "lark-github-issue"
 version = "0.1.0"
 dependencies = [
  "base64 0.22.1",
@@ -807,8 +807,6 @@ dependencies = [
 [[package]]
 name = "lark_bot_sdk"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53c65c56e819fc82334774129ca4e572dc0680a5cec87837a62311a83170307f"
 dependencies = [
  "ahash",
  "anyhow",
@@ -831,8 +829,6 @@ dependencies = [
 [[package]]
 name = "lark_bot_sdk_macros"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d6dc6430061efe7e66ec3f9682b58fd7f90590b21d67915f046a74bd5b86b0c5"
 dependencies = [
  "quote",
  "syn 2.0.79",

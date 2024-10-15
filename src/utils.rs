@@ -87,20 +87,3 @@ pub async fn fetch_image(content: &str) -> String {
     }
     content_result
 }
-
-#[tokio::test]
-async fn test_fetch_image() {
-    let content = r#"
-    {需求描述:无}
-
-    ## 详细描述
-     {需求详细描述（可附文档）:无}
-
-    @image/jpeg![b4858e94459b3648cbe43ca05b3a8972.jpg](IpZfb8SAKorlf0xwOgNch69enDh)
-
-    --- 
-    于 **{@需求提出日期}** 创建
-    "#;
-    println!("{}", fetch_image(content.into()).await);
-    assert!(false);
-}
