@@ -1,5 +1,5 @@
 use bytes::BufMut;
-use lark_bot_sdk::api::drive::download_drive_media::DownloadDriveMediaReq;
+use lark_bot_sdk_patch::api::drive::download_drive_media::DownloadDriveMediaReq;
 use regex::Regex;
 use reqwest::multipart::Part;
 use serde_json::Value;

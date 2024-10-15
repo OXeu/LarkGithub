@@ -1,7 +1,7 @@
 use std::{collections::HashMap, sync::OnceLock};
 
 use chrono::DateTime;
-use lark_bot_sdk::{
+use lark_bot_sdk_patch::{
     api::bitable::{
         search_bitable_record::{
             AppTableRecordSubResp, ConditionSubReq, FilterInfoSubReq, SearchBitableRecordReq,
@@ -116,7 +116,7 @@ pub fn get_issue_id(record: &AppTableRecordSubResp) -> Option<u64> {
 pub async fn bind_issue(
     record_id: &str,
     issue: u64,
-) -> Result<(UpdateBitableRecordResp, CommonResponse), lark_bot_sdk::error::Error> {
+) -> Result<(UpdateBitableRecordResp, CommonResponse), lark_bot_sdk_patch::error::Error> {
     let app_token = dotenv!("LARK_BITABLE_TOKEN");
     let table_id = dotenv!("LARK_BITABLE_TABLE_ID");
     let github_bind_field = dotenv!("LARK_GITHUB_BIND_FIELD");
