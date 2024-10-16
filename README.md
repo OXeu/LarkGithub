@@ -12,21 +12,20 @@
 
 ## 使用方法
 
-### 1
+### 飞书
 创建一个飞书应用，添加以下权限：
 - bitable:app 查看、评论、编辑和管理多维表格
 - contact:user.base:readonly 获取用户基本信息
 
 发布并审核
 
-### 2
+**在需要同步的多维表格的文档菜单 > 更多 > 添加文档应用 > 搜索“多维表格同步” 添加，否则将会缺少文档读写权限**
+
 为需要同步的多维表格增加一个超链接字段，名称随意（如 Github Issue），但需要将名称填写到 `LARK_GITHUB_BIND_FIELD` 中。
 
-### 3
+### GitHub
 
 复制 [lark-sync.yaml](./.github/workflows/lark-sync.yaml) 至需要同步的仓库
-
-### 4
 
 在仓库 > Settings > Secrets and variables > Action 中点击 New Repository Secret 添加以下 Secrets (逐条添加)
 |Name|示例值|说明|
@@ -34,7 +33,6 @@
 |LARK_APP_ID|cli_xxxxxxxxxx|飞书应用的 APP ID|
 |LARK_APP_SECRET|R4ndOmsEcRetR4ndOmsEcRet|飞书应用的 APP Secret|
 
-### 5
 飞书多维表格的链接通常为以下形式：
 ```
 https://bingyan.feishu.cn/base/VPe0b11IqALpzZsa8OjcC90qnth?table=tblXgSAuBu3tKMjD&view=vewMnpHsUz
