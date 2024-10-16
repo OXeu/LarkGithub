@@ -24,11 +24,15 @@ pub async fn update_issues(id: u64, issue: IssueReq) -> Result<(), octocrab::Err
     let octocrab = init_gh().await;
     let owner = env::var("GH_OWNER").unwrap_or(String::new());
     let repo = env::var("GH_REPO").unwrap_or(String::new());
+    let force_update_user = env::var("FORCE_UPDATE_USER").unwrap_or(String::new()) == "true";
     let content = fetch_image(&issue.content).await;
     let issue_now: Issue = octocrab.issues(owner.clone(), repo.clone()).get(id).await?;
-    if issue_now.user.r#type != "Bot" || issue_now.user.r#type == "User" {
+    if (issue_now.user.r#type != "Bot" || issue_now.user.r#type == "User") && !force_update_user {
         info!("💦 跳过更新: issue 由用户创建");
         return Ok(());
+    }
+    if force_update_user {
+        info!("🐢 强制更新(包括用户创建的 issue)");
     }
     octocrab
         .issues(owner, repo)

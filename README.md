@@ -51,10 +51,12 @@ https://bingyan.feishu.cn/base/VPe0b11IqALpzZsa8OjcC90qnth?table=tblXgSAuBu3tKMj
 |LARK_BITABLE_TABLE_ID|tblXgSAuBu3tKMjD|飞书多维表格中所需同步表的 id|
 |LARK_BITABLE_CONDITION_CONJUNCTION|or|多个筛选条件之间的条件关系可填 and 或 or 或不填|
 |LARK_BITABLE_CONDITIONS|需求描述,isNotEmpty;需求详细描述（可附文档）,isNotEmpty|多个筛选条件用 ; 分隔，筛选条件内的多个内容用 , 分割，详见下文|
-|ISSUE_UPDATE|true|是否在多维表格内容更新后同步更新 issue 内容|
 |ISSUE_TITLE_FORMAT|{需求描述:未命名}|Issue 标题格式化模板，详见下文|
 |ISSUE_LABEL_FIELDS|优先级,需求分类,需求状态|Issue Label来源字段，多个用 `,` 分隔|
 |ISSUE_CONTENT_FORMAT|同标题格式，详细示例见下文|Issue 内容格式化模板，详见下文|
+|ISSUE_UPDATE|true|是否在多维表格内容更新后同步更新 issue 内容|
+|FORCE_UPDATE|false|可选，强制更新所有 issue,适用于修改了模板格式的情况，更新完成后请将其重置为 false|
+FORCE_UPDATE_USER|false|可选，是否强制更新由用户创建的 issue。默认只会更新由 bot 创建的 issue|
 
 ## 格式化模板
 标题和内容使用模板来提高可自定义程度，以下是其详细规则：
