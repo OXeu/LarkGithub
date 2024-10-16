@@ -27,6 +27,7 @@ pub async fn update_issues(id: u64, issue: IssueReq) -> Result<(), octocrab::Err
     octocrab
         .issues(owner, repo)
         .update(id)
+        .title(&issue.title)
         .body(&content)
         .labels(&issue.label)
         .send()

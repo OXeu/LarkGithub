@@ -1,11 +1,9 @@
-use std::{env, fs::File, path::Path};
+use std::env;
 use github::{create_issue, fetch_issue_updated_time, init_gh, update_issues};
 use lark::{bind_issue, fetch_records, format_record, get_issue_id};
 use tracing::{error, info};
 extern crate dotenvy;
 extern crate tokio;
-#[macro_use]
-extern crate dotenvy_macro;
 mod github;
 mod issue;
 mod lark;
