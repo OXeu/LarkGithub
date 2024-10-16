@@ -20,6 +20,7 @@ jobs:
                 GH_REPO: ${{ github.event.repository.name }}
                 LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
                 LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+                IMG_AUTH_TOKEN: ${{ secrets.IMG_AUTH_TOKEN }}
                 LARK_BITABLE_TOKEN: ${{ vars.LARK_BITABLE_TOKEN }}
                 LARK_BITABLE_TABLE_ID: ${{ vars.LARK_BITABLE_TABLE_ID }}
                 LARK_BITABLE_FIELDS: ${{ vars.LARK_BITABLE_FIELDS }}
@@ -30,3 +31,5 @@ jobs:
                 ISSUE_LABEL_FIELDS: ${{ vars.ISSUE_LABEL_FIELDS }}
                 LARK_GITHUB_BIND_FIELD: ${{ vars.LARK_GITHUB_BIND_FIELD }}
                 ISSUE_UPDATE: ${{ vars.ISSUE_UPDATE }}
+                IMG_URL: ${{ vars.IMG_URL }}
+                IMG_FILE_FIELD: ${{ vars.IMG_FILE_FIELD }}

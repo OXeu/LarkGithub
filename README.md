@@ -32,6 +32,7 @@
 |---|---|---|
 |LARK_APP_ID|cli_xxxxxxxxxx|飞书应用的 APP ID|
 |LARK_APP_SECRET|R4ndOmsEcRetR4ndOmsEcRet|飞书应用的 APP Secret|
+|IMG_AUTH_TOKEN|鉴权TOKEN|可选，图片上传鉴权值，通过 Authorization 请求头传递给上传地址|
 
 飞书多维表格的链接通常为以下形式：
 ```
@@ -54,7 +55,9 @@ https://bingyan.feishu.cn/base/VPe0b11IqALpzZsa8OjcC90qnth?table=tblXgSAuBu3tKMj
 |ISSUE_CONTENT_FORMAT|同标题格式，详细示例见下文|Issue 内容格式化模板，详见下文|
 |ISSUE_UPDATE|true|是否在多维表格内容更新后同步更新 issue 内容|
 |FORCE_UPDATE|false|可选，强制更新所有 issue,适用于修改了模板格式的情况，更新完成后请将其重置为 false|
-FORCE_UPDATE_USER|false|可选，是否强制更新由用户创建的 issue。默认只会更新由 bot 创建的 issue|
+|FORCE_UPDATE_USER|false|可选，是否强制更新由用户创建的 issue。默认只会更新由 bot 创建的 issue|
+|IMG_URL|https://sm.ms/api/v2/upload|可选，默认为 sm.ms 上传地址|
+|IMG_FILE_FIELD|smfile|可选，文件上传字段|
 
 ## 格式化模板
 标题和内容使用模板来提高可自定义程度，以下是其详细规则：

@@ -8,6 +8,7 @@ mod github;
 mod issue;
 mod lark;
 mod utils;
+mod uploader;
 
 #[tokio::main]
 async fn main() {

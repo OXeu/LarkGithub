@@ -24,3 +24,4 @@ base64 = "0.22.1"
 bytes = "1.7.2"
 reqwest = "0.12.8"
 openssl = { version = "0.10", features = ["vendored"] }
+serde = { version = "1.0.210", features = ["serde_derive"] }
