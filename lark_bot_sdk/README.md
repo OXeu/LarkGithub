@@ -48,13 +48,13 @@ let client = LarkBuilder::default()
     .timeout(Duration::from_secs(10))
     .is_isv(false)
     .normal()
-    .build(dotenv!("app_id"), dotenv!("app_secret"));
+    .build(env::var("app_id").unwrap_or(String::new()), env::var("app_secret").unwrap_or(String::new()));
 
 let custom_client = LarkBuilder::default().build_with_store_and_client(
     RWStoreMemory::default(),
     DefaultClient::default(),
-    dotenv!("app_id"),
-    dotenv!("app_secret"),
+    env::var("app_id").unwrap_or(String::new()),
+    env::var("app_secret").unwrap_or(String::new()),
 );
 ```
 
@@ -101,7 +101,7 @@ client().file().upload_file(req).await;
 
 ```rust
 let req = DownloadFileReq {
-    file_key: dotenv!("download_file_id").into(),
+    file_key: env::var("download_file_id").unwrap_or(String::new()).into(),
 };
 let res = client().file().download_file(req).await.unwrap();
 let mut file = tokio::fs::File::create("test.jpg").await.unwrap();

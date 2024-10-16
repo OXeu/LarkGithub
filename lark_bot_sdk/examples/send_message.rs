@@ -8,14 +8,14 @@ use lark_bot_sdk::{api::message::send_raw_message::SendRawMessageReq, core::Lark
 fn client() -> &'static DefaultLarkClient {
     static CLIENT: OnceLock<DefaultLarkClient> = OnceLock::new();
 
-    CLIENT.get_or_init(|| Lark::new(dotenv!("app_id"), dotenv!("app_secret")))
+    CLIENT.get_or_init(|| Lark::new(env::var("app_id").unwrap_or(String::new()), env::var("app_secret").unwrap_or(String::new())))
 }
 
 #[tokio::main]
 async fn main() {
     let req = SendRawMessageReq {
         receive_id_type: "open_id".to_owned(),
-        receive_id: dotenv!("open_id").to_owned(),
+        receive_id: env::var("open_id").unwrap_or(String::new()).to_owned(),
         msg_type: "text".into(),
         content: "{\"text\":\"test content\"}".into(),
         ..Default::default()

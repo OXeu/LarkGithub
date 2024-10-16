@@ -10,14 +10,14 @@ use tokio::io::AsyncWriteExt;
 fn client() -> &'static DefaultLarkClient {
     static CLIENT: OnceLock<DefaultLarkClient> = OnceLock::new();
 
-    CLIENT.get_or_init(|| Lark::new(dotenv!("app_id"), dotenv!("app_secret")))
+    CLIENT.get_or_init(|| Lark::new(env::var("app_id").unwrap_or(String::new()), env::var("app_secret").unwrap_or(String::new())))
 }
 
 // 注意，下载接口的错误类型为 **ErrHttpCode**
 #[tokio::main]
 async fn main() {
     let req = DownloadFileReq {
-        file_key: dotenv!("download_file_id").into(),
+        file_key: env::var("download_file_id").unwrap_or(String::new()).into(),
     };
     let (mut resp, common_resp) = match client().file().download_file(req).await {
         Ok(resp) => resp,

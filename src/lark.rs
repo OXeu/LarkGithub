@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::OnceLock};
+use std::{collections::HashMap, env, sync::OnceLock};
 
 use chrono::DateTime;
 use lark_bot_sdk_patch::{
@@ -17,17 +17,17 @@ use tracing::{debug, warn};
 use crate::{issue::IssueReq, utils::for_string};
 pub fn client() -> &'static DefaultLarkClient {
     static CLIENT: OnceLock<DefaultLarkClient> = OnceLock::new();
-    let app_id = dotenv!("LARK_APP_ID");
-    let app_secret = dotenv!("LARK_APP_SECRET");
+    let app_id = env::var("LARK_APP_ID").unwrap_or(String::new());
+    let app_secret = env::var("LARK_APP_SECRET").unwrap_or(String::new());
     CLIENT.get_or_init(|| Lark::new(app_id, app_secret))
 }
 
 pub async fn fetch_records() -> Vec<AppTableRecordSubResp> {
-    let app_token = dotenv!("LARK_BITABLE_TOKEN");
-    let table_id = dotenv!("LARK_BITABLE_TABLE_ID");
-    let field_names = dotenv!("LARK_BITABLE_FIELDS");
-    let conjunction = dotenv!("LARK_BITABLE_CONDITION_CONJUNCTION");
-    let cond_str = dotenv!("LARK_BITABLE_CONDITIONS");
+    let app_token = env::var("LARK_BITABLE_TOKEN").unwrap_or(String::new());
+    let table_id = env::var("LARK_BITABLE_TABLE_ID").unwrap_or(String::new());
+    let field_names = env::var("LARK_BITABLE_FIELDS").unwrap_or(String::new());
+    let conjunction = env::var("LARK_BITABLE_CONDITION_CONJUNCTION").unwrap_or(String::new());
+    let cond_str = env::var("LARK_BITABLE_CONDITIONS").unwrap_or(String::new());
     let fields: Vec<Option<String>> = field_names
         .split(",")
         .filter(|s| !s.is_empty())
@@ -98,8 +98,8 @@ pub async fn fetch_records() -> Vec<AppTableRecordSubResp> {
 }
 
 pub fn get_issue_id(record: &AppTableRecordSubResp) -> Option<u64> {
-    let issue_bind_field = dotenv!("LARK_GITHUB_BIND_FIELD");
-    if let Some(value) = record.fields.get(issue_bind_field) {
+    let issue_bind_field = env::var("LARK_GITHUB_BIND_FIELD").unwrap_or(String::new());
+    if let Some(value) = record.fields.get(&issue_bind_field) {
         let link = for_string(value);
         if let Some(id_str) = link.split("/").last() {
             let id_res = id_str.parse::<u64>();
@@ -117,11 +117,11 @@ pub async fn bind_issue(
     record_id: &str,
     issue: u64,
 ) -> Result<(UpdateBitableRecordResp, CommonResponse), lark_bot_sdk_patch::error::Error> {
-    let app_token = dotenv!("LARK_BITABLE_TOKEN");
-    let table_id = dotenv!("LARK_BITABLE_TABLE_ID");
-    let github_bind_field = dotenv!("LARK_GITHUB_BIND_FIELD");
-    let owner = dotenv!("GH_OWNER");
-    let repo = dotenv!("GH_REPO");
+    let app_token = env::var("LARK_BITABLE_TOKEN").unwrap_or(String::new());
+    let table_id = env::var("LARK_BITABLE_TABLE_ID").unwrap_or(String::new());
+    let github_bind_field = env::var("LARK_GITHUB_BIND_FIELD").unwrap_or(String::new());
+    let owner = env::var("GH_OWNER").unwrap_or(String::new());
+    let repo = env::var("GH_REPO").unwrap_or(String::new());
     let link = format!("https://github.com/{owner}/{repo}/issues/{issue}");
     let url_text = format!("#{issue}");
     let mut obj_map = Map::new();
@@ -143,8 +143,8 @@ pub async fn bind_issue(
 }
 
 pub fn format_record(record: &AppTableRecordSubResp) -> IssueReq {
-    let title_format_str = dotenv!("ISSUE_TITLE_FORMAT");
-    let content_format_str = dotenv!("ISSUE_CONTENT_FORMAT");
+    let title_format_str = env::var("ISSUE_TITLE_FORMAT").unwrap_or(String::new());
+    let content_format_str = env::var("ISSUE_CONTENT_FORMAT").unwrap_or(String::new());
     let mut title = String::from(title_format_str);
     let mut content = String::from(content_format_str);
     record.fields.iter().for_each(|(field, value)| {
@@ -188,7 +188,7 @@ pub fn format_record(record: &AppTableRecordSubResp) -> IssueReq {
 }
 
 fn get_labels(record: &AppTableRecordSubResp) -> Vec<String> {
-    let label_fields_name = dotenv!("ISSUE_LABEL_FIELDS");
+    let label_fields_name = env::var("ISSUE_LABEL_FIELDS").unwrap_or(String::new());
     let fields: Vec<&str> = label_fields_name.split(",").collect();
     let mut label: Vec<String> = Vec::new();
     for field_name in fields {

@@ -143,8 +143,8 @@ mod tests {
     #[tokio::test]
     async fn test_get_app_access_token() {
         let lark = Lark::new(
-            dotenv!("app_id").to_owned(),
-            dotenv!("app_secret").to_owned(),
+            env::var("app_id").unwrap_or(String::new()).to_owned(),
+            env::var("app_secret").unwrap_or(String::new()).to_owned(),
         );
 
         let token = lark

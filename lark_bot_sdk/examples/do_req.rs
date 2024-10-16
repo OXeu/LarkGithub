@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 fn client() -> &'static DefaultLarkClient {
     static CLIENT: OnceLock<DefaultLarkClient> = OnceLock::new();
 
-    CLIENT.get_or_init(|| Lark::new(dotenv!("app_id"), dotenv!("app_secret")))
+    CLIENT.get_or_init(|| Lark::new(env::var("app_id").unwrap_or(String::new()), env::var("app_secret").unwrap_or(String::new())))
 }
 
 #[derive(Debug, Serialize, Clone, Default, lark_bot_sdk::macros::ApiReqParams)]
@@ -75,7 +75,7 @@ async fn main() {
     let req = ApiRequest {
         param_data: SendRawMessageReq {
             receive_id_type: "open_id".to_owned(),
-            receive_id: dotenv!("open_id").to_owned(),
+            receive_id: env::var("open_id").unwrap_or(String::new()).to_owned(),
             msg_type: "text".into(),
             content: "{\"text\":\"test content\"}".into(),
             uuid: None,

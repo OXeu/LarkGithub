@@ -1,3 +1,4 @@
+use std::{env, fs::File, path::Path};
 use github::{create_issue, fetch_issue_updated_time, init_gh, update_issues};
 use lark::{bind_issue, fetch_records, format_record, get_issue_id};
 use tracing::{error, info};
@@ -14,10 +15,10 @@ mod utils;
 async fn main() {
     tracing_subscriber::fmt::init();
     if cfg!(debug_assertions) {
-        dotenvy::dotenv().unwrap();
+        let _ = dotenvy::dotenv();
     }
     init_gh().await;
-    let update_enable = dotenv!("ISSUE_UPDATE") == "true";
+    let update_enable = env::var("ISSUE_UPDATE").unwrap_or(String::new()) == "true";
     let records = fetch_records().await;
     info!("✨ 获取到 {:#?} 条记录", records.len());
     info!("");

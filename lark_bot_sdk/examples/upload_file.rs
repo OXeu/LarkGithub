@@ -8,7 +8,7 @@ use lark_bot_sdk::error::Error::ErrApiResponse;
 fn client() -> &'static DefaultLarkClient {
     static CLIENT: OnceLock<DefaultLarkClient> = OnceLock::new();
 
-    CLIENT.get_or_init(|| Lark::new(dotenv!("app_id"), dotenv!("app_secret")))
+    CLIENT.get_or_init(|| Lark::new(env::var("app_id").unwrap_or(String::new()), env::var("app_secret").unwrap_or(String::new())))
 }
 
 #[tokio::main]
