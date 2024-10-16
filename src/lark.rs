@@ -101,6 +101,15 @@ pub fn get_issue_id(record: &AppTableRecordSubResp) -> Option<u64> {
     let issue_bind_field = env::var("LARK_GITHUB_BIND_FIELD").unwrap_or(String::new());
     if let Some(value) = record.fields.get(&issue_bind_field) {
         let link = for_string(value);
+        let issue_pattern = format!(
+            "github.com/{}/{}/issues/",
+            env::var("GH_OWNER").unwrap_or(String::new()),
+            env::var("GH_REPO").unwrap_or(String::new())
+        );
+        // 检查是否为当前仓库的 issue
+        if !link.contains(&issue_pattern) {
+            return Some(!0);
+        }
         if let Some(id_str) = link.split("/").last() {
             let id_res = id_str.parse::<u64>();
             if let Ok(id) = id_res {

@@ -30,6 +30,10 @@ async fn main() {
                 info!("🐞 更新已关闭");
                 continue;
             }
+            if id == !0 {
+                error!("🥀 非当前仓库 issue，跳过更新");
+                continue;
+            }
             match fetch_issue_updated_time(id).await {
                 Ok(time) => {
                     if record.last_modified_time > time.timestamp_millis() || force_update {
