@@ -10,14 +10,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Install Rust and Cargo
-              uses: actions-rs/toolchain@v1
-              with:
-                toolchain: stable
-                override: true
-                components: rustfmt
-        
-            - name: Install lark-github-issue
-              run: cargo install lark-github-issue
+              uses: OXeu/LarkGithub@v1
         
             - name: Run lark-github-issue
               env:
