@@ -1,0 +1,9 @@
+# action.yml
+name: 'Sync Lark Bitable to Github Issue'
+description: 'Create and Update Github Issue from Lark Bitable'
+inputs:
+outputs:
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:

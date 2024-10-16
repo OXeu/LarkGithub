@@ -1,0 +1,39 @@
+name: Bitable Sync to Github Issue
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+jobs:
+    lark_github_issue:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Install Rust and Cargo
+              uses: actions-rs/toolchain@v1
+              with:
+                toolchain: stable
+                override: true
+                components: rustfmt
+        
+            - name: Install lark-github-issue
+              run: cargo install lark-github-issue
+        
+            - name: Run lark-github-issue
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GH_OWNER: ${{ github.repository_owner }}
+                GH_REPO: ${{ github.event.repository.name }}
+                LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+                LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+                LARK_BITABLE_TOKEN: ${{ vars.LARK_BITABLE_TOKEN }}
+                LARK_BITABLE_TABLE_ID: ${{ vars.LARK_BITABLE_TABLE_ID }}
+                LARK_BITABLE_FIELDS: ${{ vars.LARK_BITABLE_FIELDS }}
+                LARK_BITABLE_CONDITION_CONJUNCTION: ${{ vars.LARK_BITABLE_CONDITION_CONJUNCTION }}
+                LARK_BITABLE_CONDITIONS: ${{ vars.LARK_BITABLE_CONDITIONS }}
+                ISSUE_TITLE_FORMAT: ${{ vars.ISSUE_TITLE_FORMAT }}
+                ISSUE_CONTENT_FORMAT: ${{ vars.ISSUE_CONTENT_FORMAT }}
+                ISSUE_LABEL_FIELDS: ${{ vars.ISSUE_LABEL_FIELDS }}
+                LARK_GITHUB_BIND_FIELD: ${{ vars.LARK_GITHUB_BIND_FIELD }}
+                ISSUE_UPDATE: ${{ vars.ISSUE_UPDATE }}
+              run: lark-github-issue
