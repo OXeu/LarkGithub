@@ -31,5 +31,7 @@ jobs:
                 ISSUE_LABEL_FIELDS: ${{ vars.ISSUE_LABEL_FIELDS }}
                 LARK_GITHUB_BIND_FIELD: ${{ vars.LARK_GITHUB_BIND_FIELD }}
                 ISSUE_UPDATE: ${{ vars.ISSUE_UPDATE }}
+                FORCE_UPDATE: ${{ vars.FORCE_UPDATE }}
+                FORCE_UPDATE_USER: ${{ vars.FORCE_UPDATE_USER }}
                 IMG_URL: ${{ vars.IMG_URL }}
                 IMG_FILE_FIELD: ${{ vars.IMG_FILE_FIELD }}

@@ -35,10 +35,10 @@ pub async fn upload(buf: Vec<u8>, name: &str, typ: &str) -> String {
         .send()
         .await
     {
-        Ok(resp) => {
-            let url = resp.json::<UploadResp>().await.unwrap().data.url;
-            format!(r#"![{}]({})"#, name, url)
-        }
+        Ok(resp) => match resp.json::<UploadResp>().await {
+            Ok(data) => format!(r#"![{}]({})"#, name, data.data.url),
+            Err(err) => format!("![{}]({:?})", name, err),
+        },
         Err(err) => {
             error!("Upload image failed, {:#?}", err);
             format!("![{}]({:?})", name, err)
