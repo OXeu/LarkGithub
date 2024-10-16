@@ -3,4 +3,4 @@ name: 'Sync Lark Bitable to Github Issue'
 description: 'Create and Update Github Issue from Lark Bitable'
 runs:
   using: 'docker'
-  image: 'thankrain/lark-github:latest'
+  image: 'docker://thankrain/lark-github:latest'
