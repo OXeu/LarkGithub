@@ -116,6 +116,7 @@ pub fn get_issue_id(record: &AppTableRecordSubResp) -> Option<u64> {
 pub async fn bind_issue(
     record_id: &str,
     issue: u64,
+    title: String,
 ) -> Result<(UpdateBitableRecordResp, CommonResponse), lark_bot_sdk_patch::error::Error> {
     let app_token = env::var("LARK_BITABLE_TOKEN").unwrap_or(String::new());
     let table_id = env::var("LARK_BITABLE_TABLE_ID").unwrap_or(String::new());
@@ -123,11 +124,12 @@ pub async fn bind_issue(
     let owner = env::var("GH_OWNER").unwrap_or(String::new());
     let repo = env::var("GH_REPO").unwrap_or(String::new());
     let link = format!("https://github.com/{owner}/{repo}/issues/{issue}");
-    let url_text = format!("#{issue}");
+    let url_text = format!("#{issue} {title}");
     let mut obj_map = Map::new();
     obj_map.insert("link".to_string(), link.into());
     obj_map.insert("text".to_string(), url_text.into());
     let mut map: HashMap<String, serde_json::value::Value> = HashMap::new();
+    warn!("绑定到 {} ", github_bind_field);
     map.insert(github_bind_field.into(), serde_json::Value::Object(obj_map));
     client()
         .bitable()

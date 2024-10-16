@@ -30,32 +30,32 @@ async fn main() {
                     Ok(time) => {
                         if record.last_modified_time > time.timestamp_millis() {
                             if let Err(err) = update_issues(id, issue).await {
-                                error!("😰 更新失败：{:?}\n{:?}", record, err);
+                                error!("🥀 更新失败：{:?}\n{:?}", record, err);
                             } else {
-                                info!("😎 更新成功");
+                                info!("🐢 更新成功");
                             }
                         } else {
-                            info!("🦜 已是最新");
+                            info!("🐤 已是最新");
                         }
                     }
-                    Err(err) => error!("😰 获取 issue(#{}):{} 失败 {:#?}", id, issue_title, err),
+                    Err(err) => error!("🥀 获取 issue(#{}):{} 失败 {:#?}", id, issue_title, err),
                 }
             } else {
-                info!("🫢 更新已关闭");
+                info!("🐞 更新已关闭");
             }
         } else {
             match create_issue(issue).await {
-                Ok(id) => {
-                    if let Err(err) = bind_issue(&record.record_id, id).await {
+                Ok((id,title)) => {
+                    if let Err(err) = bind_issue(&record.record_id, id, title).await {
                         error!(
-                            "😰 绑定失败 issue(#{}):{} \n{:?}\n{:?}",
+                            "🥀 绑定失败 issue(#{}):{} \n{:?}\n{:?}",
                             id, issue_title, record, err
                         );
                     } else {
-                        info!("😎 创建成功 issue(#{}):{} ", id, issue_title);
+                        info!("🐢 创建成功 issue(#{}):{} ", id, issue_title);
                     }
                 }
-                Err(err) => error!("😰 创建失败 issue: {} ：{:?}", issue_title, err),
+                Err(err) => error!("🥀 创建失败 issue: {} ：{:?}", issue_title, err),
             }
         }
         info!("")

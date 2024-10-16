@@ -2,9 +2,10 @@ use std::env;
 
 use chrono::{DateTime, Utc};
 use octocrab::{models::issues::Issue, Octocrab};
+use tracing::info;
 
 use crate::{issue::IssueReq, utils::fetch_image};
-pub async fn create_issue(issue: IssueReq) -> Result<u64, octocrab::Error> {
+pub async fn create_issue(issue: IssueReq) -> Result<(u64, String), octocrab::Error> {
     let octocrab = init_gh().await;
     let owner = env::var("GH_OWNER").unwrap_or(String::new());
     let repo = env::var("GH_REPO").unwrap_or(String::new());
@@ -16,7 +17,7 @@ pub async fn create_issue(issue: IssueReq) -> Result<u64, octocrab::Error> {
         .labels(Some(issue.label))
         .send()
         .await?;
-    return Ok(result.number);
+    return Ok((result.number, result.title));
 }
 
 pub async fn update_issues(id: u64, issue: IssueReq) -> Result<(), octocrab::Error> {
@@ -24,6 +25,11 @@ pub async fn update_issues(id: u64, issue: IssueReq) -> Result<(), octocrab::Err
     let owner = env::var("GH_OWNER").unwrap_or(String::new());
     let repo = env::var("GH_REPO").unwrap_or(String::new());
     let content = fetch_image(&issue.content).await;
+    let issue_now: Issue = octocrab.issues(owner.clone(), repo.clone()).get(id).await?;
+    if issue_now.user.r#type != "Bot" || issue_now.user.r#type == "User" {
+        info!("💦 跳过更新: issue 由用户创建");
+        return Ok(());
+    }
     octocrab
         .issues(owner, repo)
         .update(id)
@@ -49,4 +55,20 @@ pub async fn init_gh() -> Octocrab {
         .personal_token(token.into())
         .build()
         .unwrap()
+}
+
+#[tokio::test]
+async fn test() {
+    tracing_subscriber::fmt::init();
+    let _ = dotenvy::dotenv();
+    let octocrab = init_gh().await;
+    let owner = env::var("GH_OWNER").unwrap_or(String::new());
+    let repo = env::var("GH_REPO").unwrap_or(String::new());
+    info!("Owner: {}, Repo: {}", owner, repo);
+    let issue_now: Issue = octocrab
+        .issues(owner.clone(), repo.clone())
+        .get(105)
+        .await
+        .unwrap();
+    info!("Issue: {:#?}", issue_now);
 }
