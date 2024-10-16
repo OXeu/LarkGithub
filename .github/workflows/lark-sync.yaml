@@ -1,18 +1,19 @@
 name: Bitable Sync to Github Issue
 
 on:
-  schedule:
-    - cron: "0 * * * *"
+  #schedule:
+  #  - cron: "0 * * * *"
   workflow_dispatch:
 
 jobs:
     lark_github_issue:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            issues: write
         steps:
-            - name: Install Rust and Cargo
-              uses: OXeu/LarkGithub@v1
-        
             - name: Run lark-github-issue
+              uses: OXeu/LarkGithub@v1.3
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 GH_OWNER: ${{ github.repository_owner }}
@@ -29,4 +30,3 @@ jobs:
                 ISSUE_LABEL_FIELDS: ${{ vars.ISSUE_LABEL_FIELDS }}
                 LARK_GITHUB_BIND_FIELD: ${{ vars.LARK_GITHUB_BIND_FIELD }}
                 ISSUE_UPDATE: ${{ vars.ISSUE_UPDATE }}
-              run: lark-github-issue
