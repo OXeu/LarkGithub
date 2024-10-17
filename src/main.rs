@@ -2,13 +2,14 @@ use github::{create_issue, fetch_issue_updated_time, init_gh, update_issues};
 use lark::{bind_issue, fetch_records, format_record, get_issue_id};
 use std::env;
 use tracing::{error, info};
+use utils::parse_timestamp;
 extern crate dotenvy;
 extern crate tokio;
 mod github;
 mod issue;
 mod lark;
-mod utils;
 mod uploader;
+mod utils;
 
 #[tokio::main]
 async fn main() {
@@ -19,6 +20,7 @@ async fn main() {
     init_gh().await;
     let update_enable = env::var("ISSUE_UPDATE").unwrap_or(String::new()) == "true";
     let force_update = env::var("FORCE_UPDATE").unwrap_or(String::new()) == "true";
+    let bot_name = env::var("LARK_BOT_NAME").unwrap_or(String::new());
     let records = fetch_records().await;
     info!("✨ 获取到 {:#?} 条记录", records.len());
     info!("");
@@ -37,7 +39,8 @@ async fn main() {
             }
             match fetch_issue_updated_time(id).await {
                 Ok(time) => {
-                    if record.last_modified_time > time.timestamp_millis() || force_update {
+                    let record_time = parse_timestamp(record.last_modified_time).unwrap();
+                    if (record_time > time && record.last_modified_by.name != bot_name) || force_update {
                         if force_update {
                             info!("🐢 强制更新");
                         }

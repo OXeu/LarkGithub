@@ -1,6 +1,5 @@
 use std::{collections::HashMap, env, sync::OnceLock};
 
-use chrono::DateTime;
 use lark_bot_sdk_patch::{
     api::bitable::{
         search_bitable_record::{
@@ -14,7 +13,7 @@ use regex::Regex;
 use serde_json::Map;
 use tracing::{debug, warn};
 
-use crate::{issue::IssueReq, utils::for_string};
+use crate::{issue::IssueReq, utils::{for_string, parse_timestamp}};
 pub fn client() -> &'static DefaultLarkClient {
     static CLIENT: OnceLock<DefaultLarkClient> = OnceLock::new();
     let app_id = env::var("LARK_APP_ID").unwrap_or(String::new());
@@ -168,14 +167,14 @@ pub fn format_record(record: &AppTableRecordSubResp) -> IssueReq {
         if let Ok(v) = for_string(value).parse::<i64>() {
             let key = format!("\\{{@{}(|:[^{{}}]*)}}", field);
             let re = Regex::new(&key).unwrap();
-            let time = DateTime::from_timestamp_millis(v).unwrap();
+            let time = parse_timestamp(v).unwrap();
             let time_str = time.format("%Y/%m/%d %H:%M").to_string();
             title = re.replace_all(&title, &time_str).to_string();
             content = re.replace_all(&content, &time_str).to_string();
         }
     });
-    let created_at = DateTime::from_timestamp_millis(record.created_time).unwrap();
-    let updated_at = DateTime::from_timestamp_millis(record.last_modified_time).unwrap();
+    let created_at = parse_timestamp(record.created_time).unwrap();
+    let updated_at = parse_timestamp(record.last_modified_time).unwrap();
     content = content.replace(
         "{created_at}",
         &created_at.format("%Y/%m/%d %H:%M").to_string(),

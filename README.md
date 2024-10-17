@@ -56,6 +56,7 @@ https://bingyan.feishu.cn/base/VPe0b11IqALpzZsa8OjcC90qnth?table=tblXgSAuBu3tKMj
 |ISSUE_UPDATE|true|是否在多维表格内容更新后同步更新 issue 内容|
 |FORCE_UPDATE|false|可选，强制更新所有 issue,适用于修改了模板格式的情况，更新完成后请将其重置为 false|
 |FORCE_UPDATE_USER|false|可选，是否强制更新由用户创建的 issue。默认只会更新由 bot 创建的 issue|
+|TIME_ZONE|+8|时区，使用整数表示相对于 UTC 的偏移小时数|
 |IMG_URL|https://sm.ms/api/v2/upload|可选，默认为 sm.ms 上传地址|
 |IMG_FILE_FIELD|smfile|可选，文件上传字段|
 

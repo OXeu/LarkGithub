@@ -1,8 +1,11 @@
+use std::env;
+
 use bytes::BufMut;
+use chrono::{DateTime, FixedOffset};
 use lark_bot_sdk_patch::api::drive::download_drive_media::DownloadDriveMediaReq;
 use regex::Regex;
 use serde_json::Value;
-use tracing::error;
+use tracing::{debug, error};
 
 use crate::{lark::client, uploader::upload};
 
@@ -63,7 +66,6 @@ pub async fn fetch_image(content: &str) -> String {
                 }
                 let img = upload(buf, name, typ).await;
                 content_result = content_result.replace(full, &img);
-
             }
             Err(err) => error!("Download Resource Failed, {:?}", err),
         }
@@ -73,8 +75,8 @@ pub async fn fetch_image(content: &str) -> String {
 
 #[tokio::test]
 async fn test_fetch() {
-        let _ = dotenvy::dotenv();
-        tracing_subscriber::fmt::init();
+    let _ = dotenvy::dotenv();
+    tracing_subscriber::fmt::init();
     let content = r#"## 需求描述
 图片大小与缓存优化 
 
@@ -88,4 +90,48 @@ async fn test_fetch() {
 "#;
     let result = fetch_image(content).await;
     println!("{}", result);
+}
+
+pub fn parse_timestamp(value: i64) -> Option<DateTime<FixedOffset>> {
+    let time_zone = env::var("TIME_ZONE")
+        .unwrap_or(String::from("0"))
+        .parse::<i32>()
+        .expect("Expect a number for TIME_ZONE");
+    let offset = FixedOffset::east_opt(time_zone * 60 * 60).unwrap();
+    if value > 1_000_000_000_000_000 {
+        debug!("{value} is milli");
+        DateTime::from_timestamp_micros(value)
+    } else if value > 1_000_000_000_000 {
+        debug!("{value} is micro");
+        DateTime::from_timestamp_millis(value)
+    } else {
+        debug!("{value} is second");
+        DateTime::from_timestamp(value, 0)
+    }.map(|v|v.with_timezone(&offset))
+}
+
+#[test]
+fn timestamp_test() {
+    let _ = dotenvy::dotenv();
+    assert_eq!(
+        parse_timestamp(1729131155)
+            .unwrap()
+            .format("%Y-%m-%d %H:%M:%S")
+            .to_string(),
+        "2024-10-17 10:12:35"
+    );
+    assert_eq!(
+        parse_timestamp(1729131155000)
+            .unwrap()
+            .format("%Y-%m-%d %H:%M:%S")
+            .to_string(),
+        "2024-10-17 10:12:35"
+    );
+    assert_eq!(
+        parse_timestamp(1729131155000000)
+            .unwrap()
+            .format("%Y-%m-%d %H:%M:%S")
+            .to_string(),
+        "2024-10-17 10:12:35"
+    );
 }
